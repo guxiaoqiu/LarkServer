@@ -50,6 +50,7 @@ spring:
         max-wait: 200s
     host: 127.0.0.1
     timeout: 3000s
+    password: 123456
 #处理无用附件的定时任务时间
 #每天凌晨两点
 #deal_unused_file_job_cron: 0 0 2 * * ?
@@ -69,6 +70,16 @@ logging:
 #文件上传配置（用户级别）
 #文件上传目录（最后要有斜杠）
 file_save_path_group: C:/file-management-center/upload/group/
+
+#增加ribbon超时连接
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+  OkToRetryOnAllOperations: false
 
 feign:
   okhttp:

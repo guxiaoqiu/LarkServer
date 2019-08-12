@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.hollykunge.servicewebservice.dao.EryuanOrgDao">
+    <resultMap id="EryuanOrg" type="com.github.hollykunge.servicewebservice.model.EryuanOrg">
+        <id column="ID" property="id" jdbcType="VARCHAR" />
+        <result column="H_ID" property="hId" jdbcType="NUMERIC" />
+        <result column="SYS_ID" property="sysId" jdbcType="VARCHAR" />
+        <result column="ORG_LEVEL" property="orgLevel" jdbcType="NUMERIC" />
+        <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+        <result column="CASIC_ORG_SECRET" property="casicOrgSecret" jdbcType="VARCHAR" />
+        <result column="CASIC_ORG_CODE" property="casicOrgCode" jdbcType="VARCHAR" />
+        <result column="CASIC_PORG_CODE" property="casicPorgCode" jdbcType="VARCHAR" />
+        <result column="EXTERNAL_NAME" property="externalName" jdbcType="VARCHAR" />
+        <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+        <result column="ORDER_ID" property="orderId" jdbcType="NUMERIC" />
+        <result column="DISP_TIME" property="dispTime" jdbcType="TIMESTAMP" />
+        <result column="SYNC_TYPE" property="syncType" jdbcType="VARCHAR" />
+        <result column="STATUS" property="status" jdbcType="VARCHAR" />
+        <result column="REFA" property="refa" jdbcType="VARCHAR" />
+        <result column="REFB" property="refb" jdbcType="VARCHAR" />
+        <result column="ORG_CODE" property="orgCode" jdbcType="VARCHAR" />
+        <result column="ORG_CODES" property="orgCodes" jdbcType="VARCHAR" />
+        <result column="ORG_NAMES" property="orgNames" jdbcType="VARCHAR" />
+        <result column="MILI_CODE" property="miliCode" jdbcType="VARCHAR" />
+        <result column="ORGNATION_CODE" property="orgnationCode" jdbcType="VARCHAR" />
+        <result column="CREDIT_CODE" property="creditCode" jdbcType="VARCHAR" />
+        <result column="COUNTRY" property="country" jdbcType="VARCHAR" />
+        <result column="PROVINCE" property="province" jdbcType="VARCHAR" />
+        <result column="CITY" property="city" jdbcType="VARCHAR" />
+        <result column="AREA_COUNTY" property="areaCounty" jdbcType="VARCHAR" />
+        <result column="LANGUAGES" property="languages" jdbcType="VARCHAR" />
+        <result column="CURRENCY" property="currency" jdbcType="VARCHAR" />
+        <result column="INFOR_LEVEL" property="inforLevel" jdbcType="VARCHAR" />
+        <result column="ORG_NATURE" property="orgNature" jdbcType="VARCHAR" />
+        <result column="IMMEUP_ORG" property="immeupOrg" jdbcType="VARCHAR" />
+        <result column="ORG_MAN_LEVEL" property="orgManLevel" jdbcType="VARCHAR" />
+        <result column="IS_LI_COMPANY" property="isLiCompany" jdbcType="VARCHAR" />
+        <result column="FILL_TWO_ORG" property="fillTwoOrg" jdbcType="VARCHAR" />
+        <result column="FILL_THR_ORG" property="fillThrOrg" jdbcType="VARCHAR" />
+        <result column="ERP_COM_CODE" property="erpComCode" jdbcType="VARCHAR" />
+        <result column="ORDER_NUMBER" property="orderNumber" jdbcType="VARCHAR" />
+        <result column="INDUCLASS" property="induclass" jdbcType="VARCHAR" />
+        <result column="CRT_TIME" property="crtTime" jdbcType="TIMESTAMP" />
+        <result column="CRT_USER" property="crtUser" jdbcType="VARCHAR" />
+        <result column="CRT_NAME" property="crtName" jdbcType="VARCHAR" />
+        <result column="CRT_HOST" property="crtHost" jdbcType="VARCHAR" />
+        <result column="UPD_TIME" property="updTime" jdbcType="TIMESTAMP" />
+        <result column="UPD_USER" property="updUser" jdbcType="VARCHAR" />
+        <result column="UPD_NAME" property="updName" jdbcType="VARCHAR" />
+        <result column="UPD_HOST" property="updHost" jdbcType="VARCHAR" />
+        <result column="ATTR1" property="attr1" jdbcType="VARCHAR" />
+        <result column="ATTR2" property="attr2" jdbcType="VARCHAR" />
+        <result column="ATTR3" property="attr3" jdbcType="VARCHAR" />
+        <result column="ATTR4" property="attr4" jdbcType="VARCHAR" />
+        <result column="ATTR5" property="attr5" jdbcType="VARCHAR" />
+        <result column="ATTR6" property="attr6" jdbcType="VARCHAR" />
+        <result column="ATTR7" property="attr7" jdbcType="VARCHAR" />
+        <result column="ATTR8" property="attr8" jdbcType="VARCHAR" />
+        <result column="IS_SUCCESS" property="isSuccess" jdbcType="CHAR" />
+     </resultMap>
+
+    <!-- 新增二院部门 -->
+    <insert id="saveEryuanOrg">
+		INSERT INTO EryuanOrg (ID,H_ID, SYS_ID, ORG_LEVEL, ORG_NAME, CASIC_ORG_SECRET,CASIC_ORG_CODE,CASIC_PORG_CODE,EXTERNAL_NAME,REMARK,ORDER_ID,DISP_TIME,SYNC_TYPE,STATUS,REFA,REFB,ORG_CODE,ORG_CODES,ORG_NAMES,MILI_CODE,ORGNATION_CODE,CREDIT_CODE,COUNTRY,PROVINCE,CITY,AREA_COUNTY,CURRENCY,INFOR_LEVEL,ORG_NATURE,IMMEUP_ORG,ORG_MAN_LEVEL,IS_LI_COMPANY,FILL_TWO_ORG,FILL_THR_ORG,ERP_COM_CODE,ORDER_NUMBER,INDUCLASS,IS_SUCCESS) VALUES
+			(#{id,jdbcType=VARCHAR},#{hId,jdbcType=VARCHAR},#{sysId,jdbcType=VARCHAR}, #{orgLevel,jdbcType=VARCHAR},#{orgName,jdbcType=VARCHAR},#{casicOrgSecret,jdbcType=VARCHAR},#{casicOrgCode,jdbcType=VARCHAR},#{casicPorgCode,jdbcType=VARCHAR},#{externalName,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{orderId,jdbcType=VARCHAR},#{dispTime,jdbcType=TIMESTAMP},#{syncType,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{refa,jdbcType=VARCHAR},#{refb,jdbcType=VARCHAR},#{orgCode,jdbcType=VARCHAR},#{orgCodes,jdbcType=VARCHAR},#{orgNames,jdbcType=VARCHAR},#{miliCode,jdbcType=VARCHAR},#{orgnationCode,jdbcType=VARCHAR},#{creditCode,jdbcType=VARCHAR},#{country,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{areaCounty,jdbcType=VARCHAR},#{currency,jdbcType=VARCHAR},#{inforLevel,jdbcType=VARCHAR},#{orgNature,jdbcType=VARCHAR},#{immeupOrg,jdbcType=VARCHAR},#{orgManLevel,jdbcType=VARCHAR},#{isLiCompany,jdbcType=VARCHAR},#{fillTwoOrg,jdbcType=VARCHAR},#{fillThrOrg,jdbcType=VARCHAR},#{erpComCode,jdbcType=VARCHAR},#{orderNumber,jdbcType=VARCHAR},#{induclass,jdbcType=VARCHAR},#{isSuccess,jdbcType=VARCHAR})
+	</insert>
+
+    <!--查询二院部门 -->
+    <select id="queryEryuanOggByOrgidCount" parameterType="String" resultType="int">
+        SELECT count(*)
+        FROM EryuanOrg eg
+        WHERE eg.CASIC_ORG_CODE = #{casicOrgCode}
+        </select>
+
+    <!-- 更新二院部门 -->
+    <update id="updateEryuanOrgInfo" parameterType="com.github.hollykunge.servicewebservice.model.EryuanOrg">
+		UPDATE EryuanOrg SET H_ID = #{hId}, SYS_ID = #{sysId}, ORG_LEVEL = #{orgLevel},ORG_NAME = #{orgName},CASIC_ORG_SECRET = #{casicOrgSecret},CASIC_ORG_CODE = #{casicOrgCode},CASIC_PORG_CODE = #{casicPorgCode},EXTERNAL_NAME = #{externalName},REMARK = #{remark},ORDER_ID = #{orderId},DISP_TIME = #{dispTime,jdbcType=TIMESTAMP},SYNC_TYPE = #{syncType},STATUS = #{status},REFA = #{refa},REFB = #{refb},ORG_CODE = #{orgCode},ORG_CODES = #{orgCodes},ORG_NAMES = #{orgNames},MILI_CODE = #{miliCode},ORGNATION_CODE = #{orgnationCode},CREDIT_CODE = #{creditCode},COUNTRY = #{country},PROVINCE = #{province},CITY = #{city},AREA_COUNTY = #{areaCounty,jdbcType=VARCHAR},CURRENCY = #{currency},INFOR_LEVEL = #{inforLevel},ORG_NATURE = #{orgNature},IMMEUP_ORG = #{immeupOrg},ORG_MAN_LEVEL = #{orgManLevel},IS_LI_COMPANY = #{isLiCompany},FILL_TWO_ORG = #{fillTwoOrg},FILL_THR_ORG = #{fillThrOrg},ERP_COM_CODE = #{erpComCode},ORDER_NUMBER = #{orderNumber},INDUCLASS = #{induclass},IS_SUCCESS = #{isSuccess}
+		WHERE CASIC_ORG_CODE = #{casicOrgCode}
+	</update>
+
+    <update id="updateOrgIsSuccess" >
+        UPDATE EryuanOrg SET IS_SUCCESS = #{isSuccess}
+        WHERE  CASIC_ORG_CODE = #{casicOrgCode}
+    </update>
+</mapper>

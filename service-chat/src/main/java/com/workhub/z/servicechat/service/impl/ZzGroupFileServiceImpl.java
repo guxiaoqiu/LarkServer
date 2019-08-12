@@ -258,5 +258,24 @@ public class ZzGroupFileServiceImpl implements ZzGroupFileService {
         );
         return res;
     }
+    //设置文件审计标记 参数格式fileId,approveFlg;fileId,approveFlg;fileId,approveFlg;fileId,approveFlg
+    //组内分割用逗号，第一个表示文件id，第二个表示审计标记；组间分割用分号
+    //例如 adcssdsf,1;dsadgeggsd,0;13353ddeww,1 表示传递了三个文件，分别把它们审计标记改成通过，不通过，通过
 
+    public int setFileApproveFLg(String files,String userId) throws Exception{
+        List<Map<String,String>> params = new ArrayList<>();
+        List<String> fileArr = common.stringToList(files,";");
+        for(String temp:fileArr){
+            String[] fileParam = temp.split(",",-1);
+            if(fileParam[0]==null||fileParam[0].equals("")){
+                continue;
+            }
+            Map<String,String> singleFile = new HashMap<>();
+            singleFile.put("fileId",fileParam[0]);
+            singleFile.put("approveFlg",(fileParam[1]==null||fileParam[1].equals(""))?"1":fileParam[1]);
+            singleFile.put("updator",userId);
+            params.add(singleFile);
+        }
+        return this.zzGroupFileDao.setFileApproveFLg(params);
+    }
 }

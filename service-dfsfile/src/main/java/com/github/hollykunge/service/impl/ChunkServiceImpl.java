@@ -2,6 +2,7 @@ package com.github.hollykunge.service.impl;
 
 import com.github.hollykunge.entity.Chunk;
 import com.github.hollykunge.service.ChunkService;
+import org.springframework.stereotype.Service;
 
 
 /**
@@ -9,6 +10,7 @@ import com.github.hollykunge.service.ChunkService;
  * @author: dd
  * @since: 2019-08-01
  */
+@Service
 public class ChunkServiceImpl implements ChunkService {
 
     @Override

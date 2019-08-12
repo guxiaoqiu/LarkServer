@@ -39,6 +39,8 @@ public class ZzGroupFile implements Serializable {
     private String levels;
     //创建人姓名
     private String creatorName;
+    //审计标志
+    private String approveFlg;
 
     public String getFileId() {
         return fileId;
@@ -149,5 +151,13 @@ public class ZzGroupFile implements Serializable {
 
     public void setCreatorName(String creatorName) {
         this.creatorName = creatorName;
+    }
+
+    public String getApproveFlg() {
+        return approveFlg;
+    }
+
+    public void setApproveFlg(String approveFlg) {
+        this.approveFlg = approveFlg;
     }
 }

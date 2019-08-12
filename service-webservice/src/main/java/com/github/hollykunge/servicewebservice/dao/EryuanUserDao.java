@@ -2,12 +2,13 @@ package com.github.hollykunge.servicewebservice.dao;
 
 import com.github.hollykunge.servicewebservice.model.EryuanOrg;
 import com.github.hollykunge.servicewebservice.model.EryuanUser;
+import tk.mybatis.mapper.common.Mapper;
 
-public interface EryuanUserDao {
+public interface EryuanUserDao extends Mapper<EryuanUser>{
 
     /**
      * 二院用户
-     * @param eryuanUser	:导入二院用户
+     * @param eryuanUser	:导入二院用户s
      * @return
      */
     public void saveEryuanUser(EryuanUser eryuanUser);
@@ -25,29 +26,5 @@ public interface EryuanUserDao {
      * @return
      */
     public int updateEryuanUserInfo(EryuanUser eryuanUser);
-
-
-    /**
-     * 二院部门
-     * @param eryuanOrg	:导入二院部门
-     * @return
-     */
-    public void saveEryuanOrg(EryuanOrg eryuanOrg);
-
-    /**
-     * 二院部门
-     * @param CASIC_ORG_CODE	:查询二院用户
-     * @return
-     */
-    public int queryEryuanOggByOrgidCount(String CASIC_ORG_CODE);
-
-    /**
-     * 更新二院部门
-     * @param eryuanOrg	：二院部门
-     * @return
-     */
-    public int updateEryuanOrgInfo(EryuanOrg eryuanOrg);
-
-
 
 }

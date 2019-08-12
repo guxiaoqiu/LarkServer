@@ -54,6 +54,7 @@ public class ZzGroupController  {
 
     @Resource
     private ZzGroupMsgService groupMsgService;
+
     @Resource
     private ZzMessageInfoService messageInfoService;
 
@@ -275,6 +276,7 @@ public class ZzGroupController  {
             vo.setOrgId(userTemp.getOrgCode());
             vo.setOrgName(userTemp.getOrgName());
             vo.setAvatar(userTemp.getAvatar());
+            //ToDo 群成员是否在线需要完善
             vo.setOnline("1");
             dataList.add(vo);
         }
@@ -304,7 +306,7 @@ public class ZzGroupController  {
     @GetMapping("dissolve")
     public ObjectRestResponse dissolve(@RequestParam("groupId") String groupId) {
         zzGroupService.dissolveGroup(groupId);
-        return new ObjectRestResponse().rel(true).msg("研讨组已解散");
+        return new ObjectRestResponse().rel(true).msg("研讨组已解散...");
     }
 
     /**
@@ -313,7 +315,7 @@ public class ZzGroupController  {
     @GetMapping("removeMember")
     public ObjectRestResponse removeMember(@RequestParam("groupId") String groupId, @RequestParam("userId") String userId) {
         zzGroupService.removeMember(groupId, userId);
-        return new ObjectRestResponse().rel(true).msg("研讨组已解散");
+        return new ObjectRestResponse().rel(true).msg("成功移除组成员");
     }
 
     /**
@@ -322,6 +324,6 @@ public class ZzGroupController  {
     @GetMapping("addMember")
     public ObjectRestResponse addMember(@RequestParam("groupId") String groupId, @RequestParam("userIds") String userIds) {
         zzGroupService.addMember(groupId, userIds);
-        return new ObjectRestResponse().rel(true).msg("研讨组已解散");
+        return new ObjectRestResponse().rel(true).msg("成功添加组成员");
     }
 }

@@ -1,12 +1,15 @@
 package com.workhub.z.servicechat.controller;
 
+import com.github.hollykunge.security.api.vo.user.UserInfo;
 import com.github.hollykunge.security.common.msg.ObjectRestResponse;
 import com.workhub.z.servicechat.config.EncryptionAndDeciphering;
 import com.workhub.z.servicechat.config.common;
 import com.workhub.z.servicechat.entity.ZzGroupFile;
 import com.workhub.z.servicechat.entity.ZzUploadFile;
+import com.workhub.z.servicechat.feign.IUserService;
 import com.workhub.z.servicechat.service.ZzFileManageService;
 import com.workhub.z.servicechat.service.ZzGroupFileService;
+import com.workhub.z.servicechat.service.ZzGroupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,6 @@ import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URLDecoder;
@@ -43,6 +45,10 @@ public class ZzFileManageController {
     private ZzGroupFileService zzGroupFileService;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private ZzGroupService zzGroupService;
+    @Autowired
+    private IUserService iUserService;
 
     /*@RequestMapping("/singleFileUpload")
     @ResponseBody
@@ -158,7 +164,7 @@ public class ZzFileManageController {
         return objectRestResponse;
     }
     @GetMapping("/downloadFile")
-    //下载 1成功 -1 失败 0 文件不存在
+    //下载 1成功 -1 失败 0 文件不存在,-2未审计通过，无权限下载
     public void downloadFile(HttpServletRequest request, HttpServletResponse response) {
         String fileId = request.getParameter("fileId");
         request.setAttribute("resCode","1");
@@ -184,6 +190,37 @@ public class ZzFileManageController {
             request.setAttribute("msg","附件不存在");
             return ;
         }
+        //判断文件是否未审计 begin
+        //1私聊文件可以下载，不限制
+        //2群文件 如果是跨场所、且未审计通过，不可以下载
+        boolean downFlg = true;//可以下载标记
+        try {
+            //如果审计通过了，可以下载(业务上，暂定审计一旦通过，不允许再修改回未通过)
+            if(zzGroupFile.getApproveFlg().equals("1")){
+
+            }else{
+                String users = zzGroupService.getGroupUserList(zzGroupFile.getGroupId());
+                if(users == null || users.equals("")){//私聊文件,可以下载
+
+                }else{//群文件判断是否跨场所
+                    List<UserInfo> userList  = iUserService.userList(users);
+                    if(common.isGroupCross(userList)){//如果跨场所
+                        downFlg = false;
+                    }
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(!downFlg){
+            request.setAttribute("resCode","-2");
+            request.setAttribute("msg","文件未审计通过，不能下载");
+            return ;
+        }
+        //判断文件是否未审计 end
+
         String fileName = zzGroupFile.getFileName();//下载名称
         String fileExt = zzGroupFile.getFileExt();//后缀
         if(!"".equals(fileExt)){
@@ -242,7 +279,27 @@ public class ZzFileManageController {
         }
         return obj;
     }
+    @PostMapping ("/setFileApproveFLg")
+    //设置文件审计标记 参数格式fileId,approveFlg;fileId,approveFlg;fileId,approveFlg;fileId,approveFlg
+    //组内分割用逗号，第一个表示文件id，第二个表示审计标记；组间分割用分号
+    //例如 adcssdsf,1;dsadgeggsd,0;13353ddeww,1 表示传递了三个文件，分别把它们审计标记改成通过，不通过，通过
+    public ObjectRestResponse setFileApproveFLg(@RequestParam String files) {
+        ObjectRestResponse obj = new ObjectRestResponse();
+        obj.rel(true);
+        obj.msg("200");
+        obj.data("成功");
 
+        String userId = common.nulToEmptyString(request.getHeader("userId"));
+        try {
+            int i =this.zzGroupFileService.setFileApproveFLg(files,userId);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            obj.rel(false);
+            obj.data("操作出错");
+        }
+        return obj;
+    }
     @RequestMapping(value = "/getFileImageStream",produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public BufferedImage getFileImageStream(String fileId) throws IOException {

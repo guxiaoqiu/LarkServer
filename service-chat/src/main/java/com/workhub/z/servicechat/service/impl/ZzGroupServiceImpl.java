@@ -3,6 +3,7 @@ package com.workhub.z.servicechat.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.hollykunge.security.api.vo.user.UserInfo;
+import com.github.hollykunge.security.common.exception.BaseException;
 import com.github.hollykunge.security.common.msg.TableResultResponse;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -17,11 +18,13 @@ import com.workhub.z.servicechat.entity.ZzUserGroup;
 import com.workhub.z.servicechat.feign.IUserService;
 import com.workhub.z.servicechat.service.ZzGroupService;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -271,7 +274,11 @@ public class ZzGroupServiceImpl implements ZzGroupService {
     @Transactional(rollbackFor={RuntimeException.class, Exception.class})
     public void addMember(String groupId, String userIds){
         String userIdsTemp = "";
-        JSONArray userIdJson = JSONObject.parseArray(userIds);
+//        JSONArray userIdJson = JSONObject.parseArray(userIds);
+        if(StringUtils.isEmpty(userIds)){
+            throw new BaseException("添加的人员不能为空");
+        }
+        List<String> userIdJson = Arrays.asList(userIds.split(","));
 
         //更新关联表
         zzUserGroupDao.deleteByGroupId(groupId);
@@ -280,12 +287,14 @@ public class ZzGroupServiceImpl implements ZzGroupService {
             userGroup.setCreatetime(new Date());
             userGroup.setId(getUUID());
             userGroup.setGroupId(groupId);
-            userGroup.setUserId(userIdJson.getString(i));
+//            userGroup.setUserId(userIdJson.getString(i));
+            userGroup.setUserId(userIdJson.get(i));
             zzUserGroupDao.insert(userGroup);
         }
 
         for (int i = 0; i < userIdJson.size(); i++) {
-            userIdsTemp += ","+userIdJson.getString(i);
+//            userIdsTemp += ","+userIdJson.getString(i);
+            userIdsTemp += ","+userIdJson.get(i);
         }
         //判断是否跨域场所,直接用的ProcessEditGroup里面那个
         boolean isCross = false;

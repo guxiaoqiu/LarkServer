@@ -28,7 +28,7 @@ public interface IUserService {
 //    public void test();
 
     @RequestMapping(value = "/api/user/list", method = RequestMethod.POST)
-    public List<UserInfo> userList(@RequestParam("userIdSet") String userIdSet);
+    public List<UserInfo> userList(@RequestParam("userIds") String userIdSet);
 
     @RequestMapping(value = "/api/user/all", method = RequestMethod.POST)
     public List<UserInfo> all();

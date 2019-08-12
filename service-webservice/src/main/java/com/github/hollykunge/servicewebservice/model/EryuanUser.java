@@ -1,214 +1,221 @@
 package com.github.hollykunge.servicewebservice.model;
 
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
-
+@Table(name = "ERYUANUSER")
 public class EryuanUser {
 
-    private String ID;
-    private String H_ID;
-    private String SYS_ID;
-    private String CASIC_ORG_CODE;
+    @Id
+    private String id;
+    private String hId;
+    private String sysId;
+    private String casicOrgCode;
 
     public String getID() {
-        return ID;
+        return id;
     }
 
     public void setID(String ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
-    private String OPERATOR_NAME;
-    private String EMP_CODE;
-    private String P_ID;
-    private String SECRET_LEVEL;
-    private Date BIRTH_DATE;
-    private String GENDER;
-    private String O_TEL;
-    private String O_EMAIL;
-    private String WORK_POST;
-    private String TEC_POST;
-    private String ORDER_ID;
-    private String SYNC_TYPE;
-    private Date DISP_TIME;
-    private String REMARK;
-    private String REFA;
-    private String REFB;
-    private String ORG_NAME;
-    private String STATUS;
+    private String operatorName;
+    private String empCode;
+    private String pId;
+    private String secretLevel;
+    private Date birthDate;
+    private String gender;
+    private String oTel;
+    private String oEmail;
+    private String workPost;
+    private String tecPost;
+    private String orderId;
+    private String syncType;
+    private Date dispTime;
+    private String remark;
+    private String refa;
+    private String refb;
+    private String orgName;
+    private String status;
+    @Column(name = "IS_SUCCESS")
+    private String isSuccess;
 
     public String getH_ID() {
-        return H_ID;
+        return hId;
     }
 
     public void setH_ID(String h_ID) {
-        H_ID = h_ID;
+        hId = h_ID;
     }
 
     public String getSYS_ID() {
-        return SYS_ID;
+        return sysId;
     }
 
     public void setSYS_ID(String SYS_ID) {
-        this.SYS_ID = SYS_ID;
+        this.sysId = SYS_ID;
     }
 
     public String getCASIC_ORG_CODE() {
-        return CASIC_ORG_CODE;
+        return casicOrgCode;
     }
 
     public void setCASIC_ORG_CODE(String CASIC_ORG_CODE) {
-        this.CASIC_ORG_CODE = CASIC_ORG_CODE;
+        this.casicOrgCode = CASIC_ORG_CODE;
     }
 
     public String getOPERATOR_NAME() {
-        return OPERATOR_NAME;
+        return operatorName;
     }
 
     public void setOPERATOR_NAME(String OPERATOR_NAME) {
-        this.OPERATOR_NAME = OPERATOR_NAME;
+        this.operatorName = OPERATOR_NAME;
     }
 
     public String getEMP_CODE() {
-        return EMP_CODE;
+        return empCode;
     }
 
     public void setEMP_CODE(String EMP_CODE) {
-        this.EMP_CODE = EMP_CODE;
+        this.empCode = EMP_CODE;
     }
 
     public String getP_ID() {
-        return P_ID;
+        return pId;
     }
 
     public void setP_ID(String p_ID) {
-        P_ID = p_ID;
+        pId = p_ID;
     }
 
     public String getSECRET_LEVEL() {
-        return SECRET_LEVEL;
+        return secretLevel;
     }
 
     public void setSECRET_LEVEL(String SECRET_LEVEL) {
-        this.SECRET_LEVEL = SECRET_LEVEL;
+        this.secretLevel = SECRET_LEVEL;
     }
 
     public Date getBIRTH_DATE() {
-        return BIRTH_DATE;
+        return birthDate;
     }
 
     public void setBIRTH_DATE(Date BIRTH_DATE) {
-        this.BIRTH_DATE = BIRTH_DATE;
+        this.birthDate = BIRTH_DATE;
     }
 
     public String getGENDER() {
-        return GENDER;
+        return gender;
     }
 
     public void setGENDER(String GENDER) {
-        this.GENDER = GENDER;
+        this.gender = GENDER;
     }
 
     public String getO_TEL() {
-        return O_TEL;
+        return oTel;
     }
 
     public void setO_TEL(String o_TEL) {
-        O_TEL = o_TEL;
+        oTel = o_TEL;
     }
 
     public String getO_EMAIL() {
-        return O_EMAIL;
+        return oEmail;
     }
 
     public void setO_EMAIL(String o_EMAIL) {
-        O_EMAIL = o_EMAIL;
+        oEmail = o_EMAIL;
     }
 
     public String getWORK_POST() {
-        return WORK_POST;
+        return workPost;
     }
 
     public void setWORK_POST(String WORK_POST) {
-        this.WORK_POST = WORK_POST;
+        this.workPost = WORK_POST;
     }
 
     public String getTEC_POST() {
-        return TEC_POST;
+        return tecPost;
     }
 
     public void setTEC_POST(String TEC_POST) {
-        this.TEC_POST = TEC_POST;
+        this.tecPost = TEC_POST;
     }
 
     public String getORDER_ID() {
-        return ORDER_ID;
+        return orderId;
     }
 
     public void setORDER_ID(String ORDER_ID) {
-        this.ORDER_ID = ORDER_ID;
+        this.orderId = ORDER_ID;
     }
 
     public String getSYNC_TYPE() {
-        return SYNC_TYPE;
+        return syncType;
     }
 
     public void setSYNC_TYPE(String SYNC_TYPE) {
-        this.SYNC_TYPE = SYNC_TYPE;
+        this.syncType = SYNC_TYPE;
     }
 
     public Date getDISP_TIME() {
-        return DISP_TIME;
+        return dispTime;
     }
 
     public void setDISP_TIME(Date DISP_TIME) {
-        this.DISP_TIME = DISP_TIME;
+        this.dispTime = DISP_TIME;
     }
 
     public String getSTATUS() {
-        return STATUS;
+        return status;
     }
 
     public void setSTATUS(String STATUS) {
-        this.STATUS = STATUS;
+        this.status = STATUS;
     }
 
     public String getREMARK() {
-        return REMARK;
+        return remark;
     }
 
     public void setREMARK(String REMARK) {
-        this.REMARK = REMARK;
+        this.remark = REMARK;
     }
 
     public String getREFA() {
-        return REFA;
+        return refa;
     }
 
     public void setREFA(String REFA) {
-        this.REFA = REFA;
+        this.refa = REFA;
     }
 
     public String getREFB() {
-        return REFB;
+        return refb;
     }
 
     public void setREFB(String REFB) {
-        this.REFB = REFB;
+        this.refb = REFB;
     }
 
     public String getORG_NAME() {
-        return ORG_NAME;
+        return orgName;
     }
 
     public void setORG_NAME(String ORG_NAME) {
-        this.ORG_NAME = ORG_NAME;
+        this.orgName = ORG_NAME;
     }
 
+    public String getIsSuccess() {
+        return isSuccess;
+    }
 
-
-
-
-
-
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
 }

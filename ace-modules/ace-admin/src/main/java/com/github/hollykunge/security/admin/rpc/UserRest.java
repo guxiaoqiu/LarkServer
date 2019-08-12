@@ -67,7 +67,7 @@ public class UserRest {
     }
 
     @RequestMapping(value = "/user/list", method = RequestMethod.POST)
-    public @ResponseBody List<UserInfo> userList(String userIds){
+    public @ResponseBody List<UserInfo> userList(@RequestParam String userIds){
         List<UserInfo> userInfos = new ArrayList<UserInfo>();
         if (!StringUtils.isEmpty(userIds)) {
             String[] ids = userIds.split(",");

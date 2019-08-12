@@ -338,7 +338,14 @@ public class FileInfoBiz extends BaseBiz<FileInfoMapper, FileInfoEntity> {
         return fileInfoVO;
     }
 
-    @Cache(key = "files{1}", result = String.class)
+    /**
+     * 文件存放redies中，时间为一年
+     * @param base64FileName
+     * @param fileId
+     * @return
+     * @throws Exception
+     */
+    @Cache(key = "files{1}", result = String.class,expire = 525600)
     public String uploadFileCache(String base64FileName, String fileId) throws Exception {
         return fileId;
     }

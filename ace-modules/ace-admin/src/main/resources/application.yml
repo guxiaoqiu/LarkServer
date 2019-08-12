@@ -162,7 +162,7 @@ redis:
       #需要修改地址
     host: ${REDIS_HOST:127.0.0.1}
     port:  ${REDIS_PORT:6379}
-    password:
+    password: 123456
     timeout: 20000
     # 服务或应用名
     sysName: ace-admin

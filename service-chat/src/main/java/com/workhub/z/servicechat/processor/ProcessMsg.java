@@ -57,10 +57,8 @@ public class ProcessMsg extends AbstractMsgProcessor{
                     zzUploadFile.setLevels(common.nulToEmptyString(common.getJsonStringKeyValue(message,"content.secretLevel")));
                     zzUploadFile.setReceiver(common.nulToEmptyString(common.getJsonStringKeyValue(message,"toId")));
                     zzUploadFile.setUserId(common.nulToEmptyString(common.getJsonStringKeyValue(message,"fromId")));
-                    //ToDo
-                    //这里需要改前端返回消息的json，因为username、contactInfo.name都是发送人，缺少一个接收人姓名
                     zzUploadFile.setUserName(common.nulToEmptyString(common.getJsonStringKeyValue(message,"username")));
-                    zzUploadFile.setReceiverName(common.nulToEmptyString(common.getJsonStringKeyValue(message,"contactInfo.name")));
+                    zzUploadFile.setReceiverName(common.nulToEmptyString(common.nulToEmptyString(common.getJsonStringKeyValue(message,"toName"))));//接收人姓名
                     zzUploadFile.setSuccessFlg("1");//是否发送成功
                     zzGroupFileService.fileRecord(zzUploadFile);
                 }

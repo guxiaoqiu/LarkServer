@@ -537,14 +537,53 @@ public class common {
         String userOrgCode="";
         for(UserInfo userInfo:userInfoList){
             if(userOrgCode.equals("")){//遍历的第一条
-                userOrgCode = userInfo.getOrgCode();
-            }else{//判断如果组织id不一样，立刻判定是跨场所，终止循环
-                if(!userOrgCode.equals(userInfo.getOrgCode())){
-                    iscross = true;
-                    break;
+                if(userInfo.getOrgCode()!=null && !userInfo.getOrgCode().equals("") && userInfo.getOrgCode().length()>=4){
+                    userOrgCode = userInfo.getOrgCode().substring(0,4);
                 }
+
+            }else{//判断如果组织id不一样，立刻判定是跨场所，终止循环
+                if(userInfo.getOrgCode()!=null && !userInfo.getOrgCode().equals("") && userInfo.getOrgCode().length()>=4){
+                    if(!userOrgCode.equals(userInfo.getOrgCode().substring(0,4))){
+                        iscross = true;
+                        break;
+                    }
+                }
+
             }
         }
         return iscross;
+    }
+    //String to List 同时去重复
+    public static List<String>  stringToList(String str){
+        return stringToList(str,",",true);
+    }
+    //String to List 同时去重复
+    public static List<String>  stringToList(String str,String markFlg){
+        return stringToList(str,markFlg,true);
+    }
+    //String to List 同时去重复
+    public static List<String>  stringToList(String str,boolean clearMul){
+        return stringToList(str,",",clearMul);
+    }
+    //String to List 同时去重复 str 待处理字符串；markFlg 分隔符；clearMul是否去重复
+    public static List<String>  stringToList(String str,String markFlg , boolean clearMul){
+        List<String> res = new ArrayList<>();
+        String[] arr = str.split(markFlg);
+        if(arr!=null && arr.length>0){
+
+           for(String temp : arr){
+               if (clearMul){
+                   if(res.contains(temp)){
+                       continue;
+                   }else{
+                       res.add(temp);
+                   }
+               }else {
+                   res.add(temp);
+               }
+
+           }
+        }
+        return res;
     }
 }

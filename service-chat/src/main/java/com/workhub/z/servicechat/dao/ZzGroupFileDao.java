@@ -82,4 +82,6 @@ public interface ZzGroupFileDao extends Mapper<ZzGroupFile> {
     //文件信息补全
     int fileUpdate(@Param("param") ZzUploadFile zzUploadFile);
     List<FileMonitoringVO> fileMonitoring(@Param("params")  Map<String,Object> param);
+
+    int setFileApproveFLg(@Param("params") List<Map<String,String>> params);
 }

@@ -17,6 +17,7 @@
         <result property="groupId" column="GROUP_ID" jdbcType="VARCHAR"/>
         <result property="levels" column="LEVELS" jdbcType="VARCHAR"/>
         <result property="creatorName" column="CREATOR_NAME" jdbcType="VARCHAR"/>
+        <result property="approveFlg" column="APPROVE_FLG" jdbcType="VARCHAR"/>
     </resultMap>
 
     <resultMap id="GroupFileVo" type="com.workhub.z.servicechat.VO.GroupFileVo">
@@ -110,7 +111,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="ZzGroupFileMap">
         select
-          FILE_ID, FILE_NAME, FILE_EXT, FILE_TYPE, SIZES, PATH, READ_PATH, CREATE_TIME, CREATOR, UPDATE_TIME, UPDATOR, GROUP_ID, LEVELS
+          FILE_ID, FILE_NAME, FILE_EXT, FILE_TYPE, SIZES, PATH, READ_PATH, CREATE_TIME, CREATOR, UPDATE_TIME, UPDATOR, GROUP_ID, LEVELS,APPROVE_FLG
         from ZZ_GROUP_FILE
         where FILE_ID = #{fileId}
     </select>
@@ -310,4 +311,15 @@
                     and not exists (select 1 from zz_group g where g.group_id=f.group_id)
                 </if>
     </select>
+    <!-- 更新文件审计标志-->
+    <update id="setFileApproveFLg" parameterType="Map">
+        <foreach collection="params" item="param" separator=";" open="begin" close=";end;">
+            update ZZ_GROUP_FILE
+            set update_time=sysdate,
+            updator=#{param.updator},
+            approve_flg=#{param.approveFlg}
+            where FILE_ID=#{param.fileId}
+        </foreach>
+    </update>
+
 </mapper>

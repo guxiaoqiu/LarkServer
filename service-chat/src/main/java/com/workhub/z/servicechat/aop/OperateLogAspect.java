@@ -52,8 +52,18 @@ public class OperateLogAspect {
         String userId = request.getHeader("userId");
         zzChatLog.setUserId(userId==null?"":userId);
         // 记录下请求内容
-        zzChatLog.setUrl(request.getRequestURL().toString());
-        zzChatLog.setMethod(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
+        String url = request.getRequestURL().toString();
+        if(url.length()>500){
+            url = url.substring(0,499);
+        }
+        zzChatLog.setUrl(url);
+
+        String method = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+        if(method.length()>500){
+            method = method.substring(0,499);
+        }
+        zzChatLog.setMethod(method);
+
         zzChatLog.setUserIp(getIRealIPAddr(request));
 
 
@@ -65,6 +75,9 @@ public class OperateLogAspect {
                 }
             }
             String args = Arrays.toString(oArr);
+            if(args.length()>200){
+                args = args.substring(0,199);
+            }
             zzChatLog.setParameters(args);
         }
 
@@ -84,7 +97,7 @@ public class OperateLogAspect {
             //String resultJson = JsonUtils.getInstance().toJson(result);
             String resultJson = obj.toString();
             if (resultJson != null && resultJson.length() > 500){
-                resultJson = resultJson.substring(0,500) + "...结果过长...";
+                resultJson = resultJson.substring(0,499) + "...结果过长...";
             }
             zzChatLog.setReturnResult(resultJson);
             //log.info("{} 方法的结果是 {}",name,resultJson);

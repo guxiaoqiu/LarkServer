@@ -97,4 +97,8 @@ public interface ZzGroupFileService {
     public int fileRecord(ZzUploadFile zzUploadFile) throws Exception;
     //文件监控查询
     public TableResultResponse<FileMonitoringVO> fileMonitoring(Map<String,Object> params) throws Exception;
+
+    //设置文件审计标记 fileId 、approveFlg
+    public int setFileApproveFLg(String files,String userId) throws Exception;
+
 }

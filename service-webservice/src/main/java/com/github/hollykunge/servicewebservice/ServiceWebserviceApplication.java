@@ -9,20 +9,22 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.support.ErrorPageFilter;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @SpringBootApplication
+@EnableEurekaClient
 @EnableScheduling
 @MapperScan("com.github.hollykunge.servicewebservice.dao")
 public class ServiceWebserviceApplication extends SpringBootServletInitializer {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        // 注意这里要指向原先用main方法执行的Application启动类
-        return builder.sources(ServiceWebserviceApplication.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+//        // 注意这里要指向原先用main方法执行的Application启动类
+//        return builder.sources(ServiceWebserviceApplication.class);
+//    }
    /* @Bean
     public ErrorPageFilter errorPageFilter() {
 
