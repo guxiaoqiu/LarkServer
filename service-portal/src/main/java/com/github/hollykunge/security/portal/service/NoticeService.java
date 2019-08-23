@@ -73,4 +73,35 @@ public class NoticeService extends BaseBiz<NoticeMapper, Notice> {
         }
         return false;
     }
+
+    public TableResultResponse<Notice> page(Query query,String userSecretLevel,String orgCode) {
+        Example example = new Example(Notice.class);
+        if(query.entrySet().size()>0) {
+            Example.Criteria criteria = example.createCriteria();
+            for (Map.Entry<String, Object> entry : query.entrySet()) {
+                criteria.andLike(entry.getKey(), "%" + entry.getValue().toString() + "%");
+            }
+        }
+        example.setOrderByClause("SEND_TIME DESC");
+        Page<Object> result = PageHelper.startPage(query.getPageNo(), query.getPageSize());
+        List<Notice> list = mapper.selectByExample(example);
+        list = list.stream().filter(new Predicate<Notice>() {
+            @Override
+            public boolean test(Notice notice) {
+                //组织编码为空的不显示
+                if (StringUtils.isEmpty(notice.getOrgCode())) {
+                    return false;
+                }
+                if (orgCode.contains(notice.getOrgCode())) {
+                    //密级小于当前人的密级显示
+                    if (isShow(userSecretLevel,notice.getSecretLevel())) {
+                        return true;
+                    }
+                    return false;
+                }
+                return false;
+            }
+        }).collect(Collectors.toList());
+        return new TableResultResponse<Notice>(result.getPageSize(), result.getPageNum() ,result.getPages(), result.getTotal(), list);
+    }
 }

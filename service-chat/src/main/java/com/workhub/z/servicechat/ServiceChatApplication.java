@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.context.request.RequestContextListener;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -16,6 +18,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan("com.workhub.z.servicechat.dao")
 @EnableTransactionManagement
 public class ServiceChatApplication {
+
+    @Bean
+    public RequestContextListener requestContextListener(){
+        return new RequestContextListener();
+    }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(ServiceChatApplication.class, args);

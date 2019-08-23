@@ -68,8 +68,8 @@
 
     <!--新增所有列-->
     <insert id="insert">
-        insert into WORKHUB_IWORK.ZZ_MESSAGE_INFO(MSG_ID,SENDER, RECEIVER, CREATETIME, LEVELS, CONTENT, TYPE)
-        values (#{msgId},#{sender}, #{receiver}, #{createtime}, #{levels}, #{content}, #{type})
+        insert into WORKHUB_IWORK.ZZ_MESSAGE_INFO(MSG_ID,SENDER, RECEIVER, CREATETIME, LEVELS, CONTENT, TYPE,ISCROSS)
+        values (#{msgId},#{sender}, #{receiver}, #{createtime}, #{levels}, #{content}, #{type}, #{iscross})
     </insert>
 
     <!--通过主键修改数据-->
@@ -207,8 +207,65 @@
                     from zz_user_group c
                     where 1 = 1
                     and c.user_id = #{userId}
-                    and c.group_id = #{contactId})
+                    and c.group_id = #{contactId}
+                    and c.createtime &lt;= mes.createtime
+                    )
         order by mes.createtime desc
     </select>
+    <select id="queryAllMessagePrivate" resultType="java.util.Map">
+        select content,to_char(createtime, 'yyyy-mm-dd HH24:MI:SS') sendtime
+        from zz_message_info
+        where 1 = 1
+        and type = 'USER'
+        and levels = '30'
+        and content like '%"type":1,%'
+        <if test="params.timeEnd != null and params.timeEnd != ''">
+            and to_char(createtime, 'yyyy-mm-dd') &lt;= #{params.timeEnd}
+        </if>
+        <if test="params.timeBegin != null and params.timeBegin != ''">
+            and to_char(createtime, 'yyyy-mm-dd') &gt;= #{params.timeBegin}
+        </if>
+        <if test="params.senderName != null and params.senderName != ''">
+            and content like '%"username":"'||  #{params.senderName} || '%'
+        </if>
+        <if test="params.receiverName != null and params.receiverName != ''">
+            and content  like '%"toName":"'||  #{params.receiverName} || '%'
+        </if>
+        <if test="params.messageLevel != null and params.messageLevel != ''">
+            and levels =  #{params.messageLevel}
+        </if>
+        <if test="params.messageContent != null and params.messageContent != ''">
+            and content  like '% "type":1,"title":"'||  #{params.messageContent} || '%'
+        </if>
+        order by createtime desc
+    </select>
 
+    <select id="queryAllMessageGroup" resultType="java.util.Map">
+        select content,to_char(createtime, 'yyyy-mm-dd HH24:MI:SS') sendtime
+        from zz_message_info
+        where 1 = 1
+        and type = 'GROUP'
+        and levels = '30'
+        and content like '%"type":1,%'
+        <if test="params.timeEnd != null and params.timeEnd != ''">
+            and to_char(createtime, 'yyyy-mm-dd') &lt;= #{params.timeEnd}
+        </if>
+        <if test="params.timeBegin != null and params.timeBegin != ''">
+            and to_char(createtime, 'yyyy-mm-dd') &gt;= #{params.timeBegin}
+        </if>
+        <if test="params.senderName != null and params.senderName != ''">
+            and content like '%"username":"'||  #{params.senderName} || '%'
+        </if>
+        <if test="params.receiverName != null and params.receiverName != ''">
+            and content  like '%"toName":"'||  #{params.receiverName} || '%'
+        </if>
+        <if test="params.messageLevel != null and params.messageLevel != ''">
+            and levels =  #{params.messageLevel}
+        </if>
+        <if test="params.messageContent != null and params.messageContent != ''">
+            and content  like '% "type":1,"title":"'||  #{params.messageContent} || '%'
+        </if>
+
+        order by createtime desc
+    </select>
 </mapper>

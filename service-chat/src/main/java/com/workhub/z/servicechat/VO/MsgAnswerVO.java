@@ -66,4 +66,15 @@ public class MsgAnswerVO {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "code:" + code +
+                ", nId:'" + nId + '\'' +
+                ", contactId:'" + contactId + '\'' +
+                ", oId:'" + oId + '\'' +
+                ", content:'" + content + '\'' +
+                ", status:" + status +
+                '}';
+    }
 }

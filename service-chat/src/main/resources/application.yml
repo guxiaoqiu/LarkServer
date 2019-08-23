@@ -28,7 +28,7 @@ spring:
     url: jdbc:oracle:thin:@10.11.24.136:1521:arltr
     username: workhub_iwork
   rabbitmq:
-    host: 127.0.0.1
+    host: 10.11.24.135
     port: 5672
     username: hollykunge
     password: 123456
@@ -48,7 +48,7 @@ spring:
         min-idle: 50
         max-active: 500
         max-wait: 200s
-    host: 127.0.0.1
+    host: 10.11.24.135
     timeout: 3000s
     password: 123456
 #处理无用附件的定时任务时间
@@ -101,3 +101,5 @@ log:
     module: service-chat
 #用户上传文件大小限制（单位M）
 file_size_max: 500
+#日志存放目录
+self-log-path: C:/lark_log

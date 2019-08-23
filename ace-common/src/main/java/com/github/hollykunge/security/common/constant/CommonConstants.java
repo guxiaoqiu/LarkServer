@@ -82,6 +82,7 @@ public class CommonConstants {
      * 院网关身份姓名
      */
     public static final String PERSON_ID_ARG = "dnname";
+    public static final String CLIENT_IP_ARG = "clientIp";
     /**
      * 院网关解码
      */

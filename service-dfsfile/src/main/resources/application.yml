@@ -44,6 +44,8 @@ eureka:
 
 ###fastdfs配置
 fdfs:
+  ###后期文件扩容对group1进行扩容storage
+  groupName: group1
   soTimeout: 1500 #socket连接超时时长
   connectTimeout: 600 #连接tracker服务器超时时长
   ###nginx反向监听storage服务配置，ip（nginx配置放在前台，后台只提供相对路径，防止后期迁移服务器后，所有的头像数据全部不显示了）
@@ -80,7 +82,7 @@ redis:
       maxIdle: 100
       maxWait: 10000
   #需要修改地址
-  host: 10.11.24.138
+  host: 10.11.24.135
   port:  6379
   password: 123456
   timeout: 20000
@@ -90,3 +92,40 @@ redis:
   database: 4
 prop:
   upload-folder: ./files
+
+
+##hystrix禁止服务超时时间
+hystrix:
+  threadpool:
+    default:
+      coreSize: 10000 ##并发执行的最大线程数，默认10
+      maxQueueSize: 10000 ##BlockingQueue的最大队列数
+      queueSizeRejectionThreshold: 5000 ##即使maxQueueSize没有达到，达到queueSizeRejectionThreshold该值后，请求也会被拒绝
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+ribbon:
+  eureka:
+    enabled: true
+  ReadTimeout: 30000
+  ConnectTimeout: 30000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+  OkToRetryOnAllOperations: false
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+
+auth:
+  serviceId: ace-auth
+  user:
+    token-header: Authorization
+  client:
+    token-header: client-token
+    id: service-dfsfile  #不填则默认读取spring.application.name
+    secret: 123456

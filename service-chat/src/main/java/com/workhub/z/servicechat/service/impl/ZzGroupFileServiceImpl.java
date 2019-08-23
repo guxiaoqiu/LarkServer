@@ -140,10 +140,92 @@ public class ZzGroupFileServiceImpl implements ZzGroupFileService {
      * @throws Exception
      */
     @Override
-    public TableResultResponse<GroupFileVo> groupFileList(String id,String query, int page, int size) throws Exception {
+    public TableResultResponse<GroupFileVo> groupFileList(String id,String userId,String query, int page, int size) throws Exception {
         if (StringUtil.isEmpty(id)) throw new NullPointerException("id is null");
         PageHelper.startPage(page, size);
-        List<GroupFileVo> dataList =this.zzGroupFileDao.groupFileList(id,query);
+        List<GroupFileVo> dataList =this.zzGroupFileDao.groupFileList(id,userId,query);
+        //null的String类型属性转换空字符串
+        common.putVoNullStringToEmptyString(dataList);
+        PageInfo<GroupFileVo> pageInfo = new PageInfo<>(dataList);
+        TableResultResponse<GroupFileVo> res = new TableResultResponse<GroupFileVo>(
+                pageInfo.getPageSize(),
+                pageInfo.getPageNum(),
+                pageInfo.getPages(),
+                pageInfo.getTotal(),
+                pageInfo.getList()
+        );
+        return res;
+    }
+
+
+    /**
+     * 查询群内我上传文件信息
+     * @param groupId
+     * @param page
+     * @param size
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public TableResultResponse<GroupFileVo> groupFileListByMe(String groupId,String userId, int page, int size) throws Exception {
+        if (StringUtil.isEmpty(groupId)) throw new NullPointerException("id is null");
+        PageHelper.startPage(page, size);
+        List<GroupFileVo> dataList =this.zzGroupFileDao.groupFileListByMe(groupId,userId);
+        //null的String类型属性转换空字符串
+        common.putVoNullStringToEmptyString(dataList);
+        PageInfo<GroupFileVo> pageInfo = new PageInfo<>(dataList);
+        TableResultResponse<GroupFileVo> res = new TableResultResponse<GroupFileVo>(
+                pageInfo.getPageSize(),
+                pageInfo.getPageNum(),
+                pageInfo.getPages(),
+                pageInfo.getTotal(),
+                pageInfo.getList()
+        );
+        return res;
+    }
+
+    /**
+     * 查询群内待审批文件信息
+     * @param groupId
+     * @param page
+     * @param size
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public TableResultResponse<GroupFileVo> groupFileListByOwner(String groupId,String userId, int page, int size) throws Exception {
+        if (StringUtil.isEmpty(groupId)) throw new NullPointerException("id is null");
+        PageHelper.startPage(page, size);
+        List<GroupFileVo> dataList =this.zzGroupFileDao.groupFileListByOwner(groupId,userId);
+        //null的String类型属性转换空字符串
+        common.putVoNullStringToEmptyString(dataList);
+        PageInfo<GroupFileVo> pageInfo = new PageInfo<>(dataList);
+        TableResultResponse<GroupFileVo> res = new TableResultResponse<GroupFileVo>(
+                pageInfo.getPageSize(),
+                pageInfo.getPageNum(),
+                pageInfo.getPages(),
+                pageInfo.getTotal(),
+                pageInfo.getList()
+        );
+        return res;
+    }
+
+    /**
+     * 查询群内通过审批文件信息
+     * @param groupId
+     * @param page
+     * @param size
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public TableResultResponse<GroupFileVo> groupFileListByPass(String groupId,String userId, int page, int size) throws Exception {
+        if (StringUtil.isEmpty(groupId)) throw new NullPointerException("id is null");
+        PageHelper.startPage(page, size);
+        List<GroupFileVo> dataList =this.zzGroupFileDao.groupFileListByPass(groupId);
         //null的String类型属性转换空字符串
         common.putVoNullStringToEmptyString(dataList);
         PageInfo<GroupFileVo> pageInfo = new PageInfo<>(dataList);

@@ -68,13 +68,62 @@
             ZGF.LEVELS AS LEVELS,
             ZGF.CREATOR AS REVISER,
             TO_CHAR(ZGF.CREATE_TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME
-       FROM ZZ_GROUP ZG, ZZ_GROUP_FILE ZGF
+       FROM ZZ_GROUP ZG, ZZ_GROUP_FILE ZGF,zz_user_group zu
       WHERE ZG.GROUP_ID = ZGF.GROUP_ID
       AND ZGF.SEND_FLG='1'
       <if test="query!=null and query != ''">
           AND ZGF.FILE_NAME||decode(nvl(ZGF.FILE_EXT,'null'),'null','','.'||ZGF.FILE_EXT) like '%'||#{query}||'%'
       </if>
       AND ZG.GROUP_ID = #{id}
+      and zg.group_id = zu.group_id
+      and zu.user_id = #{userId}
+      and zu.createtime &lt;= zgf.create_time
+      ORDER BY ZGF.CREATE_TIME DESC
+    </select>
+
+    <select id="groupFileListByMe" resultMap="GroupFileVo">
+          SELECT ZG.GROUP_ID,
+            ZGF.FILE_ID AS FILE_ID,
+            ZGF.FILE_NAME||decode(nvl(ZGF.FILE_EXT,'null'),'null','','.'||ZGF.FILE_EXT) as FILE_NAME,
+            ZGF.LEVELS AS LEVELS,
+            ZGF.CREATOR AS REVISER,
+            TO_CHAR(ZGF.CREATE_TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME
+       FROM ZZ_GROUP ZG, ZZ_GROUP_FILE ZGF
+      WHERE ZG.GROUP_ID = ZGF.GROUP_ID
+      AND ZGF.SEND_FLG='1'
+      AND ZG.GROUP_ID = #{groupId}
+      AND ZGF.CREATOR = #{userId}
+      ORDER BY ZGF.CREATE_TIME DESC
+    </select>
+
+    <select id="groupFileListByOwner" resultMap="GroupFileVo">
+          SELECT ZG.GROUP_ID,
+            ZGF.FILE_ID AS FILE_ID,
+            ZGF.FILE_NAME||decode(nvl(ZGF.FILE_EXT,'null'),'null','','.'||ZGF.FILE_EXT) as FILE_NAME,
+            ZGF.LEVELS AS LEVELS,
+            ZGF.CREATOR AS REVISER,
+            TO_CHAR(ZGF.CREATE_TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME
+       FROM ZZ_GROUP ZG, ZZ_GROUP_FILE ZGF
+      WHERE ZG.GROUP_ID = ZGF.GROUP_ID
+      AND ZGF.SEND_FLG='1'
+      AND ZG.GROUP_ID = #{groupId}
+      AND ZG.CREATOR = #{userId}
+      AND ZGF.APPROVE_FLG = '0'
+      ORDER BY ZGF.CREATE_TIME DESC
+    </select>
+
+    <select id="groupFileListByPass" resultMap="GroupFileVo">
+          SELECT ZG.GROUP_ID,
+            ZGF.FILE_ID AS FILE_ID,
+            ZGF.FILE_NAME||decode(nvl(ZGF.FILE_EXT,'null'),'null','','.'||ZGF.FILE_EXT) as FILE_NAME,
+            ZGF.LEVELS AS LEVELS,
+            ZGF.CREATOR AS REVISER,
+            TO_CHAR(ZGF.CREATE_TIME, 'YYYY-MM-DD HH24:MI:SS') AS TIME
+       FROM ZZ_GROUP ZG, ZZ_GROUP_FILE ZGF
+      WHERE ZG.GROUP_ID = ZGF.GROUP_ID
+      AND ZGF.SEND_FLG='1'
+      AND ZG.GROUP_ID = #{groupId}
+      AND ZGF.APPROVE_FLG = '1'
       ORDER BY ZGF.CREATE_TIME DESC
     </select>
     <!-- 文件上传转换到fastdfs系统后，启用该方法
@@ -246,7 +295,8 @@
         update ZZ_GROUP_FILE
         set SEND_FLG='1',
         LEVELS=#{param.levels},
-        GROUP_ID=#{param.receiver}
+        GROUP_ID=#{param.receiver},
+        APPROVE_FLG=#{param.approveFlg}
         where FILE_ID=#{param.fileId}
     </update>
     <insert id="fileRecord">

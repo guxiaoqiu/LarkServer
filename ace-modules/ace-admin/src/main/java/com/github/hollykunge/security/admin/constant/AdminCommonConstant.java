@@ -59,9 +59,9 @@ public class AdminCommonConstant {
      *     三元角色
      */
 //    安全管理员
-    public static final String SECURITY_USER = "安全管理员";
+    public static final String SECURITY_USER = "安全保密员";
 //    日志审计员
-    public static final String LOG_USER = "日志审计员";
+    public static final String LOG_USER = "安全审计员";
 //    系统管理员
     public static final String SYSTEM_USER = "系统管理员";
 

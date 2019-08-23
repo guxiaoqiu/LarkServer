@@ -64,7 +64,7 @@ public interface ZzGroupFileService {
      * @return
      * @throws Exception
      */
-    TableResultResponse<GroupFileVo> groupFileList(String id,String query, int page, int size) throws Exception;
+    TableResultResponse<GroupFileVo> groupFileList(String id,String userId,String query, int page, int size) throws Exception;
 
     /**
      * 查询群组的文件信息记录数
@@ -100,5 +100,29 @@ public interface ZzGroupFileService {
 
     //设置文件审计标记 fileId 、approveFlg
     public int setFileApproveFLg(String files,String userId) throws Exception;
+    /**
+    *@Description: 查询群组内通过审批的文件
+    *@Param: 群Id
+    *@return:
+    *@Author: 忠
+    *@date: 2019/8/14
+    */
+    public TableResultResponse<GroupFileVo> groupFileListByPass(String groupId,String query, int page, int size) throws Exception;
+    /**
+    *@Description: 查询群组待审批的文件
+    *@Param: 群id,申请人id
+    *@return:
+    *@Author: 忠
+    *@date: 2019/8/14
+    */
+    public TableResultResponse<GroupFileVo> groupFileListByOwner(String groupId,String userId, int page, int size) throws Exception;
+    /**
+    *@Description: 查询群组内我上传的文件
+    *@Param: 群id，登陆人id
+    *@return:
+    *@Author: 忠
+    *@date: 2019/8/14
+    */
+    public TableResultResponse<GroupFileVo> groupFileListByMe(String groupId,String userId, int page, int size) throws Exception;
 
 }

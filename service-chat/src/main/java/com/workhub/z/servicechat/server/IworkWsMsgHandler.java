@@ -74,12 +74,12 @@ public class IworkWsMsgHandler implements IWsMsgHandler {
         String clientip = request.getClientIp();
         String token = request.getParam("token");
         String userid=request.getParam("userId");
-        // 获取用户在线信息，如在线，踢掉他
-//        checkUserOnline(channelContext,userid);
+//      获取用户在线信息，如在线，踢掉他
+//      checkUserOnline(channelContext,userid);
 //      获取用户群组信息,组织机构
-//        UserInfo userInfo = serverHandler.userService.info(userid);
+//      UserInfo userInfo = serverHandler.userService.info(userid);
 //      加入组织
-//        Tio.bindGroup(channelContext, userInfo.getOrgCode());
+//      Tio.bindGroup(channelContext, userInfo.getOrgCode());
 //      用户token验证
 //      iValidateService.validate(token);
 //      Tio.bindToken(channelContext,token);
@@ -89,7 +89,7 @@ public class IworkWsMsgHandler implements IWsMsgHandler {
 //      加入系统消息组
         Tio.bindGroup(channelContext, Const.GROUP_SYS);
 //       根据握手信息，将用户绑定到群组
-        // TODO: 2019/5/13 获取当前登录用户所有群组 绑定群组
+//      TODO: 2019/5/13 获取当前登录用户所有群组 绑定群组
         List<ZzGroup> listGroupModel =  serverHandler.groupService.queryGroupListByUserId(userid);
         for (int i = 0; i < listGroupModel.size() ; i++) {
             String groupId  =listGroupModel.get(i).getGroupId();
@@ -136,21 +136,19 @@ public class IworkWsMsgHandler implements IWsMsgHandler {
             }
             serverHandler.processMsg.process(channelContext,text);
 
-        //获取前端消息 展示
-        if (log.isDebugEnabled()) {
-            log.debug("握手包:{}", httpRequest);
-        }
-
-        log.info("收到ws消息:{}", text);
-        String t = String.valueOf(text);
+//        获取前端消息 展示
+//        if (log.isDebugEnabled()) {
+//            log.debug("握手包:{}", httpRequest);
+//        }
+//
+//        log.info("收到ws消息:{}", text);
+//        String t = String.valueOf(text);
 //        JSONObject jsonObject = JSON.parseObject(text);
-
-
-        System.out.println(t);
+//        System.out.println(t);
 //      String msg = channelContext.getClientNode().toString() + " 说：" + text;
 //        String msg = t;
 //        用tio-websocket，服务器发送到客户端的Packet都是WsResponse
-          WsResponse wsResponse = WsResponse.fromText(text, IworkServerConfig.CHARSET);
+//          WsResponse wsResponse = WsResponse.fromText(text, IworkServerConfig.CHARSET);
 //        Tio.sendToAll(channelContext.getGroupContext(),wsResponse);
 //        群发
 //        Tio.bSendToGroup(channelContext.getGroupContext(), Const.GROUP_SYS, wsResponse);

@@ -10,9 +10,11 @@ import com.workhub.z.servicechat.entity.ZzGroupFile;
 import com.workhub.z.servicechat.service.ZzGroupFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
@@ -32,6 +34,8 @@ public class ZzGroupFileController {
     @Resource
     private ZzGroupFileService zzGroupFileService;
     private static Logger log = LoggerFactory.getLogger(ZzGroupFileController.class);
+    @Autowired
+    private HttpServletRequest request;
     /**
      * 通过主键查询单条数据
      *
@@ -50,7 +54,7 @@ public class ZzGroupFileController {
 
     /**
      * 群文件查询
-     * @param id
+     * @param id 群id
      * @return
      */
     //query 查询文件名称
@@ -60,10 +64,79 @@ public class ZzGroupFileController {
                                                           @RequestParam(value = "page",defaultValue = "1")Integer page,
                                                           @RequestParam(value = "size",defaultValue = "10")Integer size){
         String query="";//前端查询添加，文件名称，暂时没有加，这里先传个空就行
+        String userId=common.nulToEmptyString(request.getHeader("userId"));
         TableResultResponse<GroupFileVo> pageInfo = null;
         Long total = 0L;
         try {
-            pageInfo = this.zzGroupFileService.groupFileList(id, query, page, size);
+            pageInfo = this.zzGroupFileService.groupFileList(id,userId, query, page, size);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        T data, int pageSize, int pageNo, int totalPage, int totalCount
+        return pageInfo;
+    }
+
+    /**
+     * 我上传的群文件查询
+     * @param groupId
+     * @return
+     */
+    //query 查询文件名称
+    @PostMapping("/groupFileListByMe")
+    public TableResultResponse<GroupFileVo> groupFileListByMe(@RequestParam("groupId")String groupId,
+                                                          @RequestParam("userId")String userId,
+                                                          @RequestParam(value = "page",defaultValue = "1")Integer page,
+                                                          @RequestParam(value = "size",defaultValue = "10")Integer size){
+
+        TableResultResponse<GroupFileVo> pageInfo = null;
+        Long total = 0L;
+        try {
+            pageInfo = this.zzGroupFileService.groupFileListByMe(groupId, userId, page, size);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        T data, int pageSize, int pageNo, int totalPage, int totalCount
+        return pageInfo;
+    }
+
+    /**
+     * 群文件待审批查询
+     * @param groupId
+     * @return
+     */
+    //query 查询文件名称
+    @PostMapping("/groupFileListByOwner")
+    public TableResultResponse<GroupFileVo> groupFileListByOwner(@RequestParam("groupId")String groupId,
+                                                          @RequestParam("userId")String userId,
+                                                          @RequestParam(value = "page",defaultValue = "1")Integer page,
+                                                          @RequestParam(value = "size",defaultValue = "10")Integer size){
+        TableResultResponse<GroupFileVo> pageInfo = null;
+        Long total = 0L;
+        try {
+            pageInfo = this.zzGroupFileService.groupFileListByOwner(groupId, userId, page, size);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        T data, int pageSize, int pageNo, int totalPage, int totalCount
+        return pageInfo;
+    }
+
+    /**
+     * 群文件通过审批查询
+     * @param groupId
+     * @return
+     */
+    //query 查询文件名称
+    @PostMapping("/groupFileListByPass")
+    public TableResultResponse<GroupFileVo> groupFileListByPass(@RequestParam("groupId")String groupId,
+                                                          @RequestParam("userId")String userId,
+                                                          @RequestParam(value = "page",defaultValue = "1")Integer page,
+                                                          @RequestParam(value = "size",defaultValue = "10")Integer size){
+
+        TableResultResponse<GroupFileVo> pageInfo = null;
+        Long total = 0L;
+        try {
+            pageInfo = this.zzGroupFileService.groupFileListByPass(groupId, userId, page, size);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -23,9 +23,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.tio.core.ChannelContext;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -86,23 +88,26 @@ public class ZzGroupController  {
         groupInfo = (GroupInfoVO)ZzGroupToGroupInfo(this.zzGroupService.queryById(groupId));
         groupInfo.setMemberNum(Math.toIntExact(this.zzGroupService.groupUserListTotal(groupId)));
         common.putVoNullStringToEmptyString(groupInfo);
-        UserInfo userInfo =  iUserService.info(groupInfo.getCreator());
-        groupInfo.setCreatorName(userInfo==null?"":userInfo.getName());
         objectRestResponse.data(groupInfo);
         return objectRestResponse;
     }
 
     @PostMapping("/create")
-    public ObjectRestResponse insert(@RequestBody ZzGroup zzGroup,@RequestParam("token")String token){
+    public ObjectRestResponse insert(@RequestBody ZzGroup zzGroup,@RequestParam("token")String token) throws Exception{
         zzGroup.setGroupId(RandomId.getUUID());
         zzGroup.setCreateTime(new Date());
         String userId=common.nulToEmptyString(request.getHeader("userId"));
+        String userName = URLDecoder.decode(common.nulToEmptyString(request.getHeader("userName")),"UTF-8");
         try {
             common.putEntityNullToEmptyString(zzGroup);
             if(zzGroup!=null && zzGroup.getIscross().equals("")){
                 zzGroup.setIscross("0");
             }
             zzGroup.setCreator(userId);
+            zzGroup.setCreatorName(userName);
+
+            zzGroup.setGroupOwnerId(userId);
+            zzGroup.setGroupOwnerName(userName);
         }catch (Exception e){
             log.error(common.getExceptionMessage(e));
         }
@@ -286,7 +291,7 @@ public class ZzGroupController  {
     /**
      * 群列表监控
      //param:page 页码 size 每页几条;group_name群组名称；creator创建人姓名；level密级；
-     // dateBegin创建时间开始；dateEnd创建时间结束；pname项目名称；isclose是否关闭
+     // dateBegin创建时间开始；dateEnd创建时间结束；pname项目名称；isclose是否关闭;groupOwnerName群主名称
      * @return
      */
     @GetMapping("/groupListMonitoring")
@@ -304,7 +309,7 @@ public class ZzGroupController  {
      * 解散本研讨组
      */
     @GetMapping("dissolve")
-    public ObjectRestResponse dissolve(@RequestParam("groupId") String groupId) {
+    public ObjectRestResponse dissolve(@RequestParam("groupId") String groupId,ChannelContext channelContext) {
         zzGroupService.dissolveGroup(groupId);
         return new ObjectRestResponse().rel(true).msg("研讨组已解散...");
     }
@@ -322,7 +327,7 @@ public class ZzGroupController  {
      * 添加研讨组成员
      */
     @GetMapping("addMember")
-    public ObjectRestResponse addMember(@RequestParam("groupId") String groupId, @RequestParam("userIds") String userIds) {
+    public ObjectRestResponse addMember(@RequestParam("groupId") String groupId, @RequestParam("userIds") String userIds,ChannelContext channelContext) {
         zzGroupService.addMember(groupId, userIds);
         return new ObjectRestResponse().rel(true).msg("成功添加组成员");
     }

@@ -26,6 +26,8 @@ public class ZzUploadFile implements Serializable {
     private String fileId;
     //文件密级
     private String levels;
+    //是否审批通过
+    private String approveFlg;
 
     public String getId() {
         return id;
@@ -105,5 +107,13 @@ public class ZzUploadFile implements Serializable {
 
     public void setLevels(String levels) {
         this.levels = levels;
+    }
+
+    public String getApproveFlg() {
+        return approveFlg;
+    }
+
+    public void setApproveFlg(String approveFlg) {
+        this.approveFlg = approveFlg;
     }
 }

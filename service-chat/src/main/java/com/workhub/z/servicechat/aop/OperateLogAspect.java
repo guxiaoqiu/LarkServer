@@ -35,28 +35,54 @@ public class OperateLogAspect {
             "&& !execution(public * com.workhub.z.servicechat.service.impl.ZzPrivateMsgServiceImpl.*(..)) " +
             "&& !execution(public * com.workhub.z.servicechat.service.impl.ZzGroupMsgServiceImpl.*(..))" +
             "&& !execution(public * com.workhub.z.servicechat.service.impl.ZzMessageInfoServiceImpl.*(..)) " +
-            "&& !execution(public * com.workhub.z.servicechat.service.impl.ZzAtServiceImpl.*(..)) ")
+            "&& !execution(public * com.workhub.z.servicechat.service.impl.ZzAtServiceImpl.*(..)) "
+    )
+
     public void operateLogAspect(){}
 
     //环绕通知
     @Around(value = "operateLogAspect()")
     public Object logAround (ProceedingJoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
+        boolean isSocket = false;//是否socket日志
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        if(attributes==null){//socket无法获取request
+            isSocket = true;
+        }
+        HttpServletRequest request = null;
+
+        if(!isSocket){//socket无法获取request
+            request = attributes.getRequest();
+        }
         ZzChatLog zzChatLog = new ZzChatLog();
         zzChatLog.setId(RandomId.getUUID());
         zzChatLog.setSuccessFlg("1");
-        String userName = URLDecoder.decode(common.nulToEmptyString(request.getHeader("userName")),"UTF-8");
-        zzChatLog.setUserName(userName);
-        String userId = request.getHeader("userId");
-        zzChatLog.setUserId(userId==null?"":userId);
-        // 记录下请求内容
-        String url = request.getRequestURL().toString();
-        if(url.length()>500){
-            url = url.substring(0,499);
+
+        if(isSocket){
+            zzChatLog.setUserName("");
+        }else{
+            String userName = URLDecoder.decode(common.nulToEmptyString(request.getHeader("userName")),"UTF-8");
+            zzChatLog.setUserName(userName);
         }
-        zzChatLog.setUrl(url);
+
+        if(isSocket){
+            zzChatLog.setUserId("");
+        }else{
+            String userId = request.getHeader("userId");
+            zzChatLog.setUserId(userId==null?"":userId);
+        }
+
+        // 记录下请求内容
+        if(isSocket){
+            zzChatLog.setUrl("");
+        }else{
+            String url = request.getRequestURL().toString();
+            if(url.length()>500){
+                url = url.substring(0,499);
+            }
+            zzChatLog.setUrl(url);
+        }
+
 
         String method = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
         if(method.length()>500){
@@ -64,7 +90,12 @@ public class OperateLogAspect {
         }
         zzChatLog.setMethod(method);
 
-        zzChatLog.setUserIp(getIRealIPAddr(request));
+        if(isSocket){
+            zzChatLog.setUserIp("");
+        }else{
+            zzChatLog.setUserIp(getIRealIPAddr(request));
+        }
+
 
 
         Object[] oArr = joinPoint.getArgs();

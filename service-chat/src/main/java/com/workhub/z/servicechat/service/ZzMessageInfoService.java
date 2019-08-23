@@ -4,6 +4,7 @@ import com.github.hollykunge.security.common.msg.TableResultResponse;
 import com.workhub.z.servicechat.entity.ZzMessageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 消息存储(ZzMessageInfo)表服务接口
@@ -64,4 +65,6 @@ public interface ZzMessageInfoService {
     String queryContactsMessage(String userId);
     //当前登录人查询具体某个人或者群的聊天记录,contactId表示个人或者群id
     TableResultResponse queryHistoryMessageForSingle(String userId, String contactId, String isGroup, String query,String page, String size);
+    TableResultResponse queryAllMessagePrivate(Map params) throws Exception;
+    TableResultResponse queryAllMessageGroup(Map params) throws Exception;
 }

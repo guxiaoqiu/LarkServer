@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.tio.http.common.HttpConst;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,12 @@ public class ClearFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         int responseStatusCode = ctx.getResponseStatusCode();
         log.info("responseStatusCode: " + responseStatusCode);
+        //获取内网网关ip地址
+        String clientHost = (String) BaseContextHandler.get(CommonConstants.CLIENT_IP_ARG);
         String host = ClientUtil.getClientIp(ctx.getRequest());
+        if(!StringUtils.isEmpty(clientHost)){
+            host = clientHost;
+        }
         FrontPermission pm = (FrontPermission) BaseContextHandler.get("pm");
         IJWTInfo user = (IJWTInfo) BaseContextHandler.get("user");
         String isSuccess = "1";

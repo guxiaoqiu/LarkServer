@@ -283,17 +283,15 @@ public class ZzFileManageController {
     //设置文件审计标记 参数格式fileId,approveFlg;fileId,approveFlg;fileId,approveFlg;fileId,approveFlg
     //组内分割用逗号，第一个表示文件id，第二个表示审计标记；组间分割用分号
     //例如 adcssdsf,1;dsadgeggsd,0;13353ddeww,1 表示传递了三个文件，分别把它们审计标记改成通过，不通过，通过
-    public ObjectRestResponse setFileApproveFLg(@RequestParam String files) {
+    public ObjectRestResponse setFileApproveFLg(@RequestParam("fileId") String fileId,@RequestParam("userId") String userId) {
         ObjectRestResponse obj = new ObjectRestResponse();
         obj.rel(true);
         obj.msg("200");
         obj.data("成功");
 
-        String userId = common.nulToEmptyString(request.getHeader("userId"));
         try {
-            int i =this.zzGroupFileService.setFileApproveFLg(files,userId);
+            int i =this.zzGroupFileService.setFileApproveFLg(fileId,userId);
         } catch (Exception e) {
-
             e.printStackTrace();
             obj.rel(false);
             obj.data("操作出错");
@@ -404,5 +402,26 @@ public class ZzFileManageController {
         }
 
         return res;
+    }
+
+    /**
+    *@Description: 获取文件下载状态
+    *@Param: 文件id，多文件
+    *@return:
+    *@Author: 忠
+    *@date: 2019/8/2
+    */
+    @GetMapping("/getFilesStatus")
+    public ObjectRestResponse getFilesStatus(String fileIds){
+        ZzGroupFile zzGroupFile = zzGroupFileService.queryById(fileIds);
+        ObjectRestResponse obj = new ObjectRestResponse();
+        obj.rel(true);
+        obj.msg("200");
+        obj.data(zzGroupFile.getApproveFlg());
+        return obj;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

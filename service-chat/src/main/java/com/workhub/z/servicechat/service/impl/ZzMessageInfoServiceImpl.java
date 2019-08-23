@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.hollykunge.security.common.msg.TableResultResponse;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.workhub.z.servicechat.VO.MessageMonitoringPrivateVo;
 import com.workhub.z.servicechat.VO.SingleMessageVO;
 import com.workhub.z.servicechat.config.common;
 import com.workhub.z.servicechat.dao.ZzMessageInfoDao;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static com.workhub.z.servicechat.config.common.aggregation;
 import static com.workhub.z.servicechat.config.common.putEntityNullToEmptyString;
@@ -154,6 +152,7 @@ public class ZzMessageInfoServiceImpl implements ZzMessageInfoService {
         return  s1;
     }
     //query 聊天内容
+    //pageSize条数,pageNum页码,timeEnd开始时间,timeBegin结束时间,sender发送人,receiver接收人,levels消息密级
     public TableResultResponse queryHistoryMessageForSingle(String userId, String contactId, String isGroup,String query, String page, String size){
         int pageNum=1;
         int pageSize=10;
@@ -192,6 +191,124 @@ public class ZzMessageInfoServiceImpl implements ZzMessageInfoService {
             }
             vo.setSendTimeShort(shortTime);
             vo.setSendTimeFull(fullTime);
+            voList.add(vo);
+        }
+        try {
+            common.putVoNullStringToEmptyString(voList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(common.getExceptionMessage(e));
+        }
+
+        TableResultResponse res = new TableResultResponse(
+                pageInfo.getPageSize(),
+                pageInfo.getPageNum(),
+                pageInfo.getPages(),
+                pageInfo.getTotal(),
+                voList
+        );
+
+        return  res;
+    }
+    //监控消息-私聊
+    // pageSize条数,pageNo页码,timeEnd开始时间,timeBegin结束时间,senderName发送人,receiverName接收人,messageLevel消息密级，messageContent内容
+    public TableResultResponse queryAllMessagePrivate(Map params) throws Exception{
+        int pageNum=1;
+        int pageSize=10;
+        try {
+            pageNum=Integer.valueOf(common.nulToEmptyString(params.get("pageNo")));
+            pageSize=Integer.valueOf(common.nulToEmptyString(params.get("pageSize")));
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(common.getExceptionMessage(e));
+        }
+        String sendTimeQuery= common.nulToEmptyString(params.get("sendTime"));
+        if(!"".equals(sendTimeQuery)){
+            params.put("timeBegin",sendTimeQuery.toString().split(",")[0]);
+            params.put("timeEnd",sendTimeQuery.toString().split(",")[1]);
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map<String,String>> dataList=null;
+
+        dataList=this.zzMessageInfoDao.queryAllMessagePrivate(params);
+
+
+        PageInfo pageInfo = new PageInfo<>(dataList);
+        List<MessageMonitoringPrivateVo> voList=new ArrayList<>();
+        for(Map<String,String> map:dataList){
+            String temp = map.get("CONTENT");
+            MessageMonitoringPrivateVo vo = new MessageMonitoringPrivateVo();
+            String senderName = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"username"));
+            vo.setSenderName(senderName);
+            String senderLevel = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"contactInfo.secretLevel"));
+            vo.setSenderLevel(senderLevel);
+            String sendTime = map.get("SENDTIME");
+            vo.setSendTime(sendTime);
+            String messageLevel = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"content.secretLevel"));
+            vo.setMessageLevel(messageLevel);
+            String receiverName = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"toName"));
+            vo.setReceiverName(receiverName);
+            String messageContent = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"content.title"));
+            vo.setMessageContent(messageContent);
+            voList.add(vo);
+        }
+        try {
+            common.putVoNullStringToEmptyString(voList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(common.getExceptionMessage(e));
+        }
+
+        TableResultResponse res = new TableResultResponse(
+                pageInfo.getPageSize(),
+                pageInfo.getPageNum(),
+                pageInfo.getPages(),
+                pageInfo.getTotal(),
+                voList
+        );
+
+        return  res;
+    }
+    //监控消息-群聊
+    // pageSize条数,pageNo页码,timeEnd开始时间,timeBegin结束时间,senderName发送人,receiverName接收人,messageLevel消息密级，messageContent内容
+    public TableResultResponse queryAllMessageGroup(Map params) throws Exception{
+        int pageNum=1;
+        int pageSize=10;
+        try {
+            pageNum=Integer.valueOf(common.nulToEmptyString(params.get("pageNo")));
+            pageSize=Integer.valueOf(common.nulToEmptyString(params.get("pageSize")));
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error(common.getExceptionMessage(e));
+        }
+        String sendTimeQuery= common.nulToEmptyString(params.get("sendTime"));
+        if(!"".equals(sendTimeQuery)){
+            params.put("timeBegin",sendTimeQuery.toString().split(",")[0]);
+            params.put("timeEnd",sendTimeQuery.toString().split(",")[1]);
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<Map<String,String>> dataList=null;
+
+        dataList=this.zzMessageInfoDao.queryAllMessageGroup(params);
+
+
+        PageInfo pageInfo = new PageInfo<>(dataList);
+        List<MessageMonitoringPrivateVo> voList=new ArrayList<>();
+        for(Map<String,String> map:dataList){
+            String temp = map.get("CONTENT");
+            MessageMonitoringPrivateVo vo = new MessageMonitoringPrivateVo();
+            String senderName = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"username"));
+            vo.setSenderName(senderName);
+            String senderLevel = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"contactInfo.secretLevel"));
+            vo.setSenderLevel(senderLevel);
+            String sendTime = map.get("SENDTIME");
+            vo.setSendTime(sendTime);
+            String messageLevel = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"content.secretLevel"));
+            vo.setMessageLevel(messageLevel);
+            String receiverName = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"toName"));
+            vo.setReceiverName(receiverName);
+            String messageContent = common.nulToEmptyString(common.getJsonStringKeyValue(temp,"content.title"));
+            vo.setMessageContent(messageContent);
             voList.add(vo);
         }
         try {

@@ -4,6 +4,7 @@ import com.workhub.z.servicechat.entity.ZzMessageInfo;
 import com.workhub.z.servicechat.model.ContactsMessageDto;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 消息存储(ZzMessageInfo)表数据库访问层
@@ -66,4 +67,6 @@ public interface ZzMessageInfoDao {
    List<ContactsMessageDto> queryContactsMessage(@Param("userId")String userId);
    List<String> queryHistoryMessageForSinglePrivate(@Param("userId")String userId,@Param("contactId")String contactId,@Param("query")String query);
    List<String> queryHistoryMessageForSingleGroup(@Param("userId")String userId,@Param("contactId")String contactId,@Param("query")String query);
+   List<Map<String,String>> queryAllMessagePrivate(@Param("params")Map params);
+   List<Map<String,String>> queryAllMessageGroup(@Param("params")Map params);
 }
